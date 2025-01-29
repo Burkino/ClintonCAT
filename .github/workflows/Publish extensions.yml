@@ -6,14 +6,25 @@ on:
   workflow_dispatch:
     
 jobs:
-  archive:
+  create_zip:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository code
       - name: Checkout release source
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.release.tag_name }}
+      
+      - name: Make zip file
+        run: zip -r ClintonCAT.zip *
 
-      - name: Debug with tmate
-        uses: mxschmitt/action-tmate@v3
+  firefox_publish:
+    runs-on: ubuntu-latest
+    needs: create_zip
+    steps:
+    - uses: wdzeng/firefox-addon@v1
+      with:
+        addon-guid: 45dbd9e3a99f493c8c3d
+        xpi-path: ClintonCAT.zip
+        self-hosted: false
+        jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
+        jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
