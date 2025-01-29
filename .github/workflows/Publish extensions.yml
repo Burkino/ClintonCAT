@@ -17,10 +17,21 @@ jobs:
       - name: Make zip file
         run: zip -r ClintonCAT.zip *
 
+      - name: Upload archive as artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: ClintonCAT.zip
+          path: ClintonCAT.zip
+
   firefox_publish:
     runs-on: ubuntu-latest
     needs: create_zip
     steps:
+    - name: Download prepared archive
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: ClintonCAT.zip
+    
     - uses: wdzeng/firefox-addon@v1
       with:
         addon-guid: "{11e4e61d-44d6-4d8c-af69-8d879d411a84}"
