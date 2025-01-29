@@ -16,7 +16,7 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - name: Set addon-gui env variable
+      - name: Set GUID env variable
         id: guid
         run: echo "GUID=$(jq -r '.browser_specific_settings.gecko.id' manifest.json)" >> $GITHUB_OUTPUT
       
