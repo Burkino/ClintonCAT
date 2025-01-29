@@ -34,7 +34,7 @@ jobs:
     
     - uses: wdzeng/firefox-addon@v1
       with:
-        addon-guid: "{11e4e61d-44d6-4d8c-af69-8d879d411a84}"
+        addon-guid: "{a7dd0cb9-76e3-4c95-9abb-ece5fd1351fe}"
         xpi-path: ClintonCAT.zip
         self-hosted: false
         license: MIT
