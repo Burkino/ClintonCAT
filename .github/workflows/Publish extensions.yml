@@ -37,5 +37,7 @@ jobs:
         addon-guid: "{11e4e61d-44d6-4d8c-af69-8d879d411a84}"
         xpi-path: ClintonCAT.zip
         self-hosted: false
+        license: MIT
+        approval-notes: "The extension source can be found at https://github.com/WayneKeenan/ClintonCAT"
         jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
         jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
