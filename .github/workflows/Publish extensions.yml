@@ -4,15 +4,21 @@ on:
   release:
     types: [published]
   workflow_dispatch:
-    
+
 jobs:
   create_zip:
     runs-on: ubuntu-latest
+    outputs:
+      guid: ${{ steps.guid.outputs.GUID }}
     steps:
       - name: Checkout release source
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.release.tag_name }}
+
+      - name: Set addon-gui env variable
+        id: guid
+        run: echo "GUID=$(jq -r '.browser_specific_settings.gecko.id' manifest.json)" >> $GITHUB_OUTPUT
       
       - name: Make zip file
         run: zip -r ClintonCAT.zip *
@@ -31,13 +37,15 @@ jobs:
       uses: actions/download-artifact@v4.1.8
       with:
         name: ClintonCAT.zip
-    
+
+    - name: Set GUID env variable
+      run: echo "GUID=${{needs.create_zip.outputs.GUID}}" >> $GITHUB_ENV
+      
     - uses: wdzeng/firefox-addon@v1
       with:
-        addon-guid: "{a7dd0cb9-76e3-4c95-9abb-ece5fd1351fe}"
+        addon-guid: ${{ env.GUID }}
         xpi-path: ClintonCAT.zip
         self-hosted: false
-        license: MIT
         approval-notes: "The extension source can be found at https://github.com/WayneKeenan/ClintonCAT"
         jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
         jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
